@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccrajp0hmiex2"]
+
+[ext_resource type="Script" path="res://addons/local-asset-library/panel.gd" id="1_yk3xv"]
+
+[node name="panel" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+script = ExtResource("1_yk3xv")
+
+[node name="vbox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="refresh" type="Button" parent="vbox"]
+layout_mode = 2
+text = "Refresh Asset List"
+alignment = 0
+
+[node name="assets" type="ItemList" parent="vbox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 24
+fixed_icon_size = Vector2i(48, 48)
+
+[connection signal="pressed" from="vbox/refresh" to="." method="refresh_pressed"]
+[connection signal="item_activated" from="vbox/assets" to="." method="asset_selected"]
