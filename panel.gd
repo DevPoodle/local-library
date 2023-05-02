@@ -50,6 +50,9 @@ func copy_directory(from : String, to : String) -> void:
 	for file in copied_directory.get_files():
 		copied_directory.copy(from + "/" + file, to + "/" + file)
 
+func folder_pressed() -> void:
+	OS.shell_open(editor_interface.get_editor_paths().get_config_dir() + "/local_asset_library")
+
 func refresh_pressed() -> void:
 	create_asset_list()
 

@@ -19,8 +19,18 @@ script = ExtResource("1_yk3xv")
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="refresh" type="Button" parent="vbox"]
+[node name="hbox" type="HBoxContainer" parent="vbox"]
 layout_mode = 2
+
+[node name="folder" type="Button" parent="vbox/hbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Open \"Local Asset Library\" Folder"
+alignment = 0
+
+[node name="refresh" type="Button" parent="vbox/hbox"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Refresh Asset List"
 alignment = 0
 
@@ -30,5 +40,6 @@ size_flags_vertical = 3
 theme_override_font_sizes/font_size = 24
 fixed_icon_size = Vector2i(48, 48)
 
-[connection signal="pressed" from="vbox/refresh" to="." method="refresh_pressed"]
+[connection signal="pressed" from="vbox/hbox/folder" to="." method="folder_pressed"]
+[connection signal="pressed" from="vbox/hbox/refresh" to="." method="refresh_pressed"]
 [connection signal="item_activated" from="vbox/assets" to="." method="asset_selected"]
