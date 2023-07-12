@@ -6,7 +6,6 @@ var directory : DirAccess
 var directory_path : String
 var file_icon : Texture2D
 var folder_icon : Texture2D
-var sub_directories : PackedStringArray
 
 func _ready() -> void:
 	if !Engine.is_editor_hint():
@@ -16,7 +15,8 @@ func _ready() -> void:
 	file_icon = editor_interface.get_base_control().get_theme_icon("FileBigThumb", "EditorIcons")
 	folder_icon = editor_interface.get_base_control().get_theme_icon("FolderBigThumb", "EditorIcons")
 	load_directory()
-	create_asset_list()
+	create_addons_assets_directory()
+	create_asset_tree()
 
 func load_directory() -> void:
 	directory_path = editor_interface.get_editor_paths().get_config_dir() + "/local_asset_library"
@@ -29,16 +29,31 @@ func create_addons_assets_directory() -> void:
 	if !DirAccess.dir_exists_absolute(addons_assets_path):
 		DirAccess.make_dir_recursive_absolute(addons_assets_path)
 
-func create_asset_list() -> void:
-	$vbox/assets.clear()
-	sub_directories.clear()
+func create_asset_tree() -> void:
+	$vbox/hbox/add.disabled = true
+	$vbox/file_tree.clear()
+	var tree_root : TreeItem = $vbox/file_tree.create_item()
+	tree_root.set_text(0, "Root")
+	copy_directory_to_tree(tree_root, directory_path)
+
+func copy_directory_to_tree(tree_root : TreeItem, copied_directory_path : String) -> void:
+	var copied_directory := DirAccess.open(copied_directory_path)
 	
-	for sub_directory in directory.get_directories():
-		$vbox/assets.add_item(sub_directory, folder_icon)
-		sub_directories.append(sub_directory)
+	for sub_directory in copied_directory.get_directories():
+		var new_tree_root := tree_root.create_child()
+		new_tree_root.set_text(0, sub_directory)
+		new_tree_root.set_icon(0, folder_icon)
+		new_tree_root.set_icon_max_width(0, 44)
+		new_tree_root.set_collapsed_recursive(true)
+		new_tree_root.set_metadata(0, "d" + copied_directory_path + "/" + sub_directory)
+		copy_directory_to_tree(new_tree_root, copied_directory_path + "/" + sub_directory)
 	
-	for file in directory.get_files():
-		$vbox/assets.add_item(file, file_icon)
+	for file in copied_directory.get_files():
+		var new_tree_item := tree_root.create_child()
+		new_tree_item.set_text(0, file)
+		new_tree_item.set_icon(0, file_icon)
+		new_tree_item.set_icon_max_width(0, 44)
+		new_tree_item.set_metadata(0, "f" + copied_directory_path + "/" + file)
 
 func copy_directory(from : String, to : String) -> void:
 	var copied_directory := DirAccess.open(from)
@@ -50,30 +65,28 @@ func copy_directory(from : String, to : String) -> void:
 	for file in copied_directory.get_files():
 		copied_directory.copy(from + "/" + file, to + "/" + file)
 
+func add_items_pressed():
+	create_addons_assets_directory()
+	
+	var selected_item : TreeItem = $vbox/file_tree.get_next_selected(null)
+	while selected_item != null:
+		var file_path : String = selected_item.get_metadata(0)
+		
+		if file_path[0] == "d":
+			copy_directory(file_path.lstrip("d"), "res://addons/" + selected_item.get_text(0))
+		elif file_path[0] == "f":
+			file_path.erase(0)
+			directory.copy(file_path.lstrip("f"), "res://addons/assets/" + selected_item.get_text(0))
+			
+		selected_item = $vbox/file_tree.get_next_selected(selected_item)
+	
+	editor_interface.get_resource_filesystem().scan()
+
 func folder_pressed() -> void:
 	OS.shell_open(editor_interface.get_editor_paths().get_config_dir() + "/local_asset_library")
 
 func refresh_pressed() -> void:
-	create_asset_list()
+	create_asset_tree()
 
-func asset_selected(index: int) -> void:
-	var file_name : String = $vbox/assets.get_item_text(index)
-	
-	if !sub_directories.has(file_name):
-		create_addons_assets_directory()
-		var new_asset_path := "res://addons/assets/" + file_name
-		if FileAccess.file_exists(new_asset_path):
-			print("An asset with the same name already exists. See: " + new_asset_path)
-			return
-		
-		directory.copy(directory_path + "/" + file_name, new_asset_path)
-		editor_interface.get_resource_filesystem().scan()
-		
-	else:
-		var new_directory_path := "res://addons/" + file_name
-		if DirAccess.dir_exists_absolute(new_directory_path):
-			print("A folder with the same name already exists. See: " + new_directory_path)
-			return
-		
-		copy_directory(directory_path + "/" + file_name, new_directory_path)
-		editor_interface.get_resource_filesystem().scan()
+func file_tree_cell_selected():
+	$vbox/hbox/add.disabled = false
