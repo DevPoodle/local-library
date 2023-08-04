@@ -12,11 +12,14 @@ func _ready() -> void:
 		queue_free()
 		return
 	
-	file_icon = editor_interface.get_base_control().get_theme_icon("FileBigThumb", "EditorIcons")
-	folder_icon = editor_interface.get_base_control().get_theme_icon("FolderBigThumb", "EditorIcons")
 	load_directory()
 	create_addons_assets_directory()
 	create_asset_tree()
+
+func _notification(notification : int) -> void:
+	if notification == NOTIFICATION_THEME_CHANGED:
+		file_icon = editor_interface.get_base_control().get_theme_icon("FileBigThumb", "EditorIcons")
+		folder_icon = editor_interface.get_base_control().get_theme_icon("FolderBigThumb", "EditorIcons")
 
 func load_directory() -> void:
 	directory_path = editor_interface.get_editor_paths().get_config_dir() + "/local_asset_library"
