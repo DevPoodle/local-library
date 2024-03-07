@@ -1,54 +1,56 @@
-[gd_scene load_steps=2 format=3 uid="uid://ccrajp0hmiex2"]
+[gd_scene load_steps=2 format=3 uid="uid://c3h36l5b7rwu0"]
 
-[ext_resource type="Script" path="res://addons/local-asset-library/panel.gd" id="1_yk3xv"]
+[ext_resource type="Script" path="res://addons/local-library/panel.gd" id="1_h8egq"]
 
-[node name="panel" type="MarginContainer"]
+[node name="Panel" type="MarginContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 259.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
-script = ExtResource("1_yk3xv")
+script = ExtResource("1_h8egq")
 
-[node name="vbox" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="hbox" type="HBoxContainer" parent="vbox"]
+[node name="HBox" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
 
-[node name="add" type="Button" parent="vbox/hbox"]
+[node name="Add" type="Button" parent="VBox/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
 text = "Add Selected Items to Project"
 alignment = 0
 
-[node name="folder" type="Button" parent="vbox/hbox"]
+[node name="Folder" type="Button" parent="VBox/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Open \"Local Asset Library\" Folder"
+text = "Open \"Local Library\" Folder"
 alignment = 0
 
-[node name="refresh" type="Button" parent="vbox/hbox"]
+[node name="Refresh" type="Button" parent="VBox/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Refresh Asset List"
+text = "Refresh List"
 alignment = 0
 
-[node name="file_tree" type="Tree" parent="vbox"]
+[node name="FileTree" type="Tree" parent="VBox"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
 hide_root = true
 select_mode = 2
 
-[connection signal="pressed" from="vbox/hbox/add" to="." method="add_items_pressed"]
-[connection signal="pressed" from="vbox/hbox/folder" to="." method="folder_pressed"]
-[connection signal="pressed" from="vbox/hbox/refresh" to="." method="refresh_pressed"]
-[connection signal="cell_selected" from="vbox/file_tree" to="." method="file_tree_cell_selected"]
+[connection signal="pressed" from="VBox/HBox/Add" to="." method="add_items_pressed"]
+[connection signal="pressed" from="VBox/HBox/Folder" to="." method="folder_pressed"]
+[connection signal="pressed" from="VBox/HBox/Refresh" to="." method="refresh_pressed"]
+[connection signal="cell_selected" from="VBox/FileTree" to="." method="file_tree_cell_selected"]

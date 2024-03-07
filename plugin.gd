@@ -1,7 +1,7 @@
 @tool
 extends EditorPlugin
 
-const panel_scene := preload("res://addons/local-asset-library/panel.tscn")
+const panel_scene := preload("res://addons/local-library/panel.tscn")
 var panel_instance : MarginContainer
 
 func _enter_tree() -> void:
@@ -17,12 +17,12 @@ func _exit_tree() -> void:
 func _has_main_screen() -> bool:
 	return true
 
-func _make_visible(visible) -> void:
+func _make_visible(visible: bool) -> void:
 	if panel_instance:
 		panel_instance.visible = visible
 
 func _get_plugin_name() -> String:
-	return "LocalAssetLib"
+	return "LocalLib"
 
 func _get_plugin_icon() -> Texture2D:
 	return get_editor_interface().get_base_control().get_theme_icon("Object", "EditorIcons")

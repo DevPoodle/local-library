@@ -16,13 +16,13 @@ func _ready() -> void:
 	create_addons_assets_directory()
 	create_asset_tree()
 
-func _notification(notification : int) -> void:
-	if notification == NOTIFICATION_THEME_CHANGED:
+func _notification(notification: int) -> void:
+	if notification == NOTIFICATION_THEME_CHANGED and Engine.is_editor_hint():
 		file_icon = editor_interface.get_base_control().get_theme_icon("FileBigThumb", "EditorIcons")
 		folder_icon = editor_interface.get_base_control().get_theme_icon("FolderBigThumb", "EditorIcons")
 
 func load_directory() -> void:
-	directory_path = editor_interface.get_editor_paths().get_config_dir() + "/local_asset_library"
+	directory_path = editor_interface.get_editor_paths().get_config_dir() + "/local_library"
 	if !DirAccess.dir_exists_absolute(directory_path):
 		DirAccess.make_dir_absolute(directory_path)
 	directory = DirAccess.open(directory_path)
@@ -33,13 +33,13 @@ func create_addons_assets_directory() -> void:
 		DirAccess.make_dir_recursive_absolute(addons_assets_path)
 
 func create_asset_tree() -> void:
-	$vbox/hbox/add.disabled = true
-	$vbox/file_tree.clear()
-	var tree_root : TreeItem = $vbox/file_tree.create_item()
+	$VBox/HBox/Add.disabled = true
+	$VBox/FileTree.clear()
+	var tree_root : TreeItem = $VBox/FileTree.create_item()
 	tree_root.set_text(0, "Root")
 	copy_directory_to_tree(tree_root, directory_path)
 
-func copy_directory_to_tree(tree_root : TreeItem, copied_directory_path : String) -> void:
+func copy_directory_to_tree(tree_root: TreeItem, copied_directory_path: String) -> void:
 	var copied_directory := DirAccess.open(copied_directory_path)
 	
 	for sub_directory in copied_directory.get_directories():
@@ -58,7 +58,7 @@ func copy_directory_to_tree(tree_root : TreeItem, copied_directory_path : String
 		new_tree_item.set_icon_max_width(0, 44)
 		new_tree_item.set_metadata(0, "f" + copied_directory_path + "/" + file)
 
-func copy_directory(from : String, to : String) -> void:
+func copy_directory(from: String, to: String) -> void:
 	var copied_directory := DirAccess.open(from)
 	DirAccess.make_dir_absolute(to)
 	
@@ -71,7 +71,7 @@ func copy_directory(from : String, to : String) -> void:
 func add_items_pressed():
 	create_addons_assets_directory()
 	
-	var selected_item : TreeItem = $vbox/file_tree.get_next_selected(null)
+	var selected_item : TreeItem = $VBox/FileTree.get_next_selected(null)
 	while selected_item != null:
 		var file_path : String = selected_item.get_metadata(0)
 		
@@ -81,15 +81,15 @@ func add_items_pressed():
 			file_path.erase(0)
 			directory.copy(file_path.lstrip("f"), "res://addons/assets/" + selected_item.get_text(0))
 			
-		selected_item = $vbox/file_tree.get_next_selected(selected_item)
+		selected_item = $VBox/FileTree.get_next_selected(selected_item)
 	
 	editor_interface.get_resource_filesystem().scan()
 
 func folder_pressed() -> void:
-	OS.shell_open(editor_interface.get_editor_paths().get_config_dir() + "/local_asset_library")
+	OS.shell_open(editor_interface.get_editor_paths().get_config_dir() + "/local_library")
 
 func refresh_pressed() -> void:
 	create_asset_tree()
 
 func file_tree_cell_selected():
-	$vbox/hbox/add.disabled = false
+	$VBox/HBox/Add.disabled = false
