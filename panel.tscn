@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c3h36l5b7rwu0"]
 
-[ext_resource type="Script" path="res://addons/local-library/panel.gd" id="1_h8egq"]
+[ext_resource type="Script" path="res://addons/local_library/panel.gd" id="1_h8egq"]
 
 [node name="Panel" type="MarginContainer"]
 anchors_preset = 15
