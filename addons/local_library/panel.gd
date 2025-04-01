@@ -18,18 +18,18 @@ func _ready() -> void:
 		create_asset_tree()
 
 func _notification(notification: int) -> void:
-	if notification == NOTIFICATION_THEME_CHANGED and Engine.is_editor_hint() and editor_interface:
-		file_icon = editor_interface.get_base_control().get_theme_icon("FileBigThumb", "EditorIcons")
-		folder_icon = editor_interface.get_base_control().get_theme_icon("FolderBigThumb", "EditorIcons")
+	if notification == NOTIFICATION_THEME_CHANGED and Engine.is_editor_hint():
+		file_icon = EditorInterface.get_base_control().get_theme_icon("FileBigThumb", "EditorIcons")
+		folder_icon = EditorInterface.get_base_control().get_theme_icon("FolderBigThumb", "EditorIcons")
 
 func load_directory() -> void:
-	directory_path = editor_interface.get_editor_paths().get_config_dir() + "/local_library"
+	directory_path = EditorInterface.get_editor_paths().get_config_dir() + "/local_library"
 	if !DirAccess.dir_exists_absolute(directory_path):
 		DirAccess.make_dir_absolute(directory_path)
 	directory = DirAccess.open(directory_path)
 
 func create_addons_assets_directory() -> void:
-	var addons_assets_path := "res://addons/assets"
+	const addons_assets_path := "res://addons/assets"
 	if !DirAccess.dir_exists_absolute(addons_assets_path):
 		DirAccess.make_dir_recursive_absolute(addons_assets_path)
 
@@ -68,9 +68,8 @@ func copy_directory(from: String, to: String) -> void:
 	for file: String in copied_directory.get_files():
 		copied_directory.copy(from + "/" + file, to + "/" + file)
 
-func add_items_pressed():
+func add_items_pressed() -> void:
 	create_addons_assets_directory()
-	
 	var selected_item : TreeItem = $VBox/FileTree.get_next_selected(null)
 	while selected_item != null:
 		var file_path: String = selected_item.get_metadata(0)
@@ -80,13 +79,13 @@ func add_items_pressed():
 			file_path.erase(0)
 			directory.copy(file_path.lstrip("f"), "res://addons/assets/" + selected_item.get_text(0))
 		selected_item = $VBox/FileTree.get_next_selected(selected_item)
-	editor_interface.get_resource_filesystem().scan()
+	EditorInterface.get_resource_filesystem().scan()
 
 func folder_pressed() -> void:
-	OS.shell_open(editor_interface.get_editor_paths().get_config_dir() + "/local_library")
+	OS.shell_open(EditorInterface.get_editor_paths().get_config_dir() + "/local_library")
 
 func refresh_pressed() -> void:
 	create_asset_tree()
 
-func file_tree_cell_selected():
+func file_tree_cell_selected() -> void:
 	$VBox/HBox/Add.disabled = false
