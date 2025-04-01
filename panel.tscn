@@ -1,6 +1,10 @@
 [gd_scene load_steps=2 format=3 uid="uid://c3h36l5b7rwu0"]
 
+<<<<<<< HEAD
 [ext_resource type="Script" uid="uid://c62tnt0qjk2lp" path="res://addons/local-library/panel.gd" id="1_h8egq"]
+=======
+[ext_resource type="Script" path="res://addons/local_library/panel.gd" id="1_h8egq"]
+>>>>>>> 2360a1f4bbae71bdcf642fc4e89f6239e356dc25
 
 [node name="Panel" type="MarginContainer"]
 anchors_preset = 15
