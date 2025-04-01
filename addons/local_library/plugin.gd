@@ -1,8 +1,8 @@
 @tool
 extends EditorPlugin
 
-const panel_scene := preload("res://addons/local_library/panel.tscn")
-var panel_instance : MarginContainer
+const panel_scene := preload("panel.tscn")
+var panel_instance: MarginContainer
 
 func _enter_tree() -> void:
 	panel_instance = panel_scene.instantiate()
