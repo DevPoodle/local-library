@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c3h36l5b7rwu0"]
+[gd_scene format=3 uid="uid://c3h36l5b7rwu0"]
 
-[ext_resource type="Script" uid="uid://c62tnt0qjk2lp" path="res://addons/local-library/addons/local_library/panel.gd" id="1_h8egq"]
+[ext_resource type="Script" uid="uid://c62tnt0qjk2lp" path="res://addons/local_library/addons/local_library/panel.gd" id="1_h8egq"]
 
-[node name="Panel" type="MarginContainer"]
+[node name="Panel" type="MarginContainer" unique_id=1040855157]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,33 +17,33 @@ theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 script = ExtResource("1_h8egq")
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="." unique_id=1504406705]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="HBox" type="HBoxContainer" parent="VBox"]
+[node name="HBox" type="HBoxContainer" parent="VBox" unique_id=862059486]
 layout_mode = 2
 
-[node name="Add" type="Button" parent="VBox/HBox"]
+[node name="Add" type="Button" parent="VBox/HBox" unique_id=1647036155]
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
 text = "Add Selected Items to Project"
 alignment = 0
 
-[node name="Folder" type="Button" parent="VBox/HBox"]
+[node name="Folder" type="Button" parent="VBox/HBox" unique_id=1224119829]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Open \"Local Library\" Folder"
+text = "Open \"Local Library\" in File Explorer"
 alignment = 0
 
-[node name="Refresh" type="Button" parent="VBox/HBox"]
+[node name="Refresh" type="Button" parent="VBox/HBox" unique_id=1971855730]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Refresh List"
 alignment = 0
 
-[node name="FileTree" type="Tree" parent="VBox"]
+[node name="FileTree" type="Tree" parent="VBox" unique_id=721313372]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20

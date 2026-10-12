@@ -1,4 +1,6 @@
-# Godot 4 Local Library Plugin
+# Local Library Plugin
 
-This Godot 4.2 plugin adds a "Local Library" menu. It allows you to import locally stored assets into your Godot project.
-Your "local library" is stored in the editor settings directory, the same place as script templates.
+This Godot plugin adds in a "Local Library" menu to the top of the editor.
+It lets you import assets or addons stored in a folder on your device into your
+Godot project. By default, assets are stored in the editor settings directory, 
+the same place where script templates are stored.

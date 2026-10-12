@@ -1,7 +1,9 @@
 @tool
 extends MarginContainer
 
-var editor_interface: EditorInterface
+const ADDON_PATH := "res://addons"
+const ASSET_PATH := "res://addons/assets"
+
 var directory: DirAccess
 var directory_path: String
 var file_icon: Texture2D
@@ -12,9 +14,11 @@ func _ready() -> void:
 		queue_free()
 		return
 	
-	if editor_interface:
-		load_directory()
-		create_addons_assets_directory()
+	if EditorInterface:
+		directory_path = EditorInterface.get_editor_paths().get_config_dir() + "/local_library"
+		if !DirAccess.dir_exists_absolute(directory_path):
+			DirAccess.make_dir_absolute(directory_path)
+		directory = DirAccess.open(directory_path)
 		create_asset_tree()
 
 func _notification(notification: int) -> void:
@@ -22,16 +26,9 @@ func _notification(notification: int) -> void:
 		file_icon = EditorInterface.get_base_control().get_theme_icon("FileBigThumb", "EditorIcons")
 		folder_icon = EditorInterface.get_base_control().get_theme_icon("FolderBigThumb", "EditorIcons")
 
-func load_directory() -> void:
-	directory_path = EditorInterface.get_editor_paths().get_config_dir() + "/local_library"
-	if !DirAccess.dir_exists_absolute(directory_path):
-		DirAccess.make_dir_absolute(directory_path)
-	directory = DirAccess.open(directory_path)
-
-func create_addons_assets_directory() -> void:
-	const addons_assets_path := "res://addons/assets"
-	if !DirAccess.dir_exists_absolute(addons_assets_path):
-		DirAccess.make_dir_recursive_absolute(addons_assets_path)
+func ensure_asset_directory_exists() -> void:
+	if !DirAccess.dir_exists_absolute(ASSET_PATH):
+		DirAccess.make_dir_recursive_absolute(ASSET_PATH)
 
 func create_asset_tree() -> void:
 	$VBox/HBox/Add.disabled = true
@@ -69,15 +66,14 @@ func copy_directory(from: String, to: String) -> void:
 		copied_directory.copy(from + "/" + file, to + "/" + file)
 
 func add_items_pressed() -> void:
-	create_addons_assets_directory()
-	var selected_item : TreeItem = $VBox/FileTree.get_next_selected(null)
+	var selected_item: TreeItem = $VBox/FileTree.get_next_selected(null)
 	while selected_item != null:
 		var file_path: String = selected_item.get_metadata(0)
 		if file_path[0] == "d":
-			copy_directory(file_path.lstrip("d"), "res://addons/" + selected_item.get_text(0))
+			copy_directory(file_path.lstrip("d"), ADDON_PATH + "/" + selected_item.get_text(0))
 		elif file_path[0] == "f":
-			file_path.erase(0)
-			directory.copy(file_path.lstrip("f"), "res://addons/assets/" + selected_item.get_text(0))
+			ensure_asset_directory_exists()
+			directory.copy(file_path.lstrip("f"), ASSET_PATH + "/" + selected_item.get_text(0))
 		selected_item = $VBox/FileTree.get_next_selected(selected_item)
 	EditorInterface.get_resource_filesystem().scan()
 
