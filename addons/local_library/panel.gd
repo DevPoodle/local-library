@@ -58,6 +58,7 @@ func copy_directory_to_tree(tree_root: TreeItem, copied_directory_path: String) 
 
 func copy_directory(from: String, to: String) -> void:
 	var copied_directory := DirAccess.open(from)
+	copied_directory.include_hidden = true
 	DirAccess.make_dir_absolute(to)
 	
 	for sub_directory: String in copied_directory.get_directories():
